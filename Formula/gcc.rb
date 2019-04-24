@@ -1,6 +1,6 @@
 class Gcc < Formula
   def arch
-    if MacOS.prefer_64_bit?
+    if Hardware::CPU.is_64_bit?
       "x86_64"
     else
       "i686"
@@ -37,7 +37,7 @@ class Gcc < Formula
   option "with-jit", "Build the jit compiler"
   option "without-fortran", "Build without the gfortran compiler"
   # enabling multilib on a host that can't run 64-bit results in build failures
-  option "without-multilib", "Build without multilib support" if MacOS.prefer_64_bit?
+  option "without-multilib", "Build without multilib support" if Hardware::CPU.is_64_bit?
 
   depends_on "gmp"
   depends_on "libmpc"
@@ -133,7 +133,7 @@ class Gcc < Formula
       args << "--with-ecj-jar=#{Formula["ecj"].opt_share}/java/ecj.jar"
     end
 
-    if build.without?("multilib") || !MacOS.prefer_64_bit?
+    if build.without?("multilib") || !Hardware::CPU.is_64_bit?
       args << "--disable-multilib"
     else
       args << "--enable-multilib"
